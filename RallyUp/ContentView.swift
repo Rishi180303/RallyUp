@@ -1,24 +1,25 @@
-//
-//  ContentView.swift
-//  RallyUp
-//
-//  Created by RISHIKUMAR on 3/29/25.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var authVM: AuthViewModel
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            if authVM.isLoggedIn {
+                if let isComplete = authVM.isProfileComplete {
+                    if isComplete {
+                        MainTabView()
+                    } else {
+                        
+                        ProfileSetupView()
+                    }
+                } else {
+                    ProgressView("Checking profile...")
+                }
+            } else {
+                LandingView()
+            }
         }
-        .padding()
     }
 }
 
-#Preview {
-    ContentView()
-}
