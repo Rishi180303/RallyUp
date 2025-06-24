@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDbzF1sr3jZS9boV81Vm06oEVKej-1fB8A</string>
+	<string>YOUR_FIREBASE_API_KEY_HERE</string>
 	<key>GCM_SENDER_ID</key>
-	<string>286462202043</string>
+	<string>YOUR_GCM_SENDER_ID_HERE</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>Rishi.RallyUp</string>
+	<string>YOUR_BUNDLE_ID_HERE</string>
 	<key>PROJECT_ID</key>
-	<string>rallyup-e2099</string>
+	<string>YOUR_FIREBASE_PROJECT_ID_HERE</string>
 	<key>STORAGE_BUCKET</key>
-	<string>rallyup-e2099.firebasestorage.app</string>
+	<string>YOUR_STORAGE_BUCKET_HERE</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:286462202043:ios:a4d46f341da7135267d99e</string>
+	<string>YOUR_GOOGLE_APP_ID_HERE</string>
 </dict>
-</plist>
+</plist> 

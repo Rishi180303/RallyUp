@@ -30,11 +30,48 @@ RallyUp is an iOS app that connects sports enthusiasts in your area. Whether you
 
 ## Getting Started
 
-1. Clone the repository
-2. Open `RallyUp.xcodeproj` in Xcode
-3. Add your Firebase configuration (`GoogleService-Info.plist`)
-4. Add your Foursquare API key in `VenueService.swift`
-5. Build and run!
+### Prerequisites
+- Xcode 14.0 or later
+- iOS 15.0 or later
+- Firebase account
+- Foursquare Developer account
+
+### Setup Instructions
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Rishi180303/RallyUp.git
+   cd RallyUp
+   ```
+
+2. **Firebase Setup**
+   - Go to [Firebase Console](https://console.firebase.google.com/)
+   - Create a new project or use existing one
+   - Add an iOS app with Bundle ID: `Rishi.RallyUp`
+   - Download `GoogleService-Info.plist`
+   - Copy `GoogleService-Info-Template.plist` to `GoogleService-Info.plist`
+   - Replace placeholder values with your actual Firebase configuration
+
+3. **Foursquare API Setup**
+   - Go to [Foursquare Developer Portal](https://developer.foursquare.com/)
+   - Create a new app
+   - Get your API key
+   - Copy `VenueService-Template.swift` to `VenueService.swift`
+   - Replace `YOUR_FOURSQUARE_API_KEY_HERE` with your actual API key
+
+4. **Open in Xcode**
+   ```bash
+   open RallyUp.xcodeproj
+   ```
+
+5. **Build and Run**
+   - Select an iOS Simulator
+   - Press `⌘ + R` or click the ▶️ button
+
+### ⚠️ Security Notice
+- **Never commit** `GoogleService-Info.plist` or API keys to version control
+- Use the provided template files as starting points
+- The `.gitignore` file is configured to exclude sensitive files
 
 ## File Structure
 
@@ -68,12 +105,14 @@ RallyUp/
 │   │   └── NearbyVenuesViewModel.swift # Venue data management
 │   │
 │   ├── Extensions.swift              # SwiftUI extensions & utilities
-│   ├── GoogleService-Info.plist      # Firebase configuration
+│   ├── GoogleService-Info-Template.plist # Firebase configuration template
 │   │
 │   └── Assets.xcassets/              # App icons & colors
 │
 ├── RallyUpTests/                     # Unit tests
 ├── RallyUpUITests/                   # UI tests
+├── GoogleService-Info-Template.plist # Firebase setup template
+├── VenueService-Template.swift       # API service template
 └── README.md                         # This file
 ```
 
@@ -114,4 +153,5 @@ This project is for educational purposes.
 
 ---
 
-**Ready to find your next game? Let's RallyUp! 🚀** 
+**Ready to find your next game? Let's RallyUp! 🚀**
+

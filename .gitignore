@@ -92,8 +92,21 @@ iOSInjectionProject/
 # macOS
 .DS_Store
 
-# Firebase
+# Firebase - CRITICAL: Never commit these files!
 GoogleService-Info.plist
+**/GoogleService-Info.plist
 
-# API Keys (if you want to exclude them)
-# Add any files containing API keys here 
+# API Keys and Secrets - CRITICAL: Never commit these!
+**/APIKeys.swift
+**/Secrets.swift
+**/Config.swift
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Other sensitive files
+*.key
+*.pem
+*.p12 
