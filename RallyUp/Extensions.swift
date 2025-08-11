@@ -92,7 +92,7 @@ extension CLLocationCoordinate2D {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "accept")
-        request.addValue("fsq3UYO/ugjYSNKo+odhi+9pe8M5b9R51ccSXwgdrxTi8LU=", forHTTPHeaderField: "Authorization")
+        request.addValue(Config.foursquareApiKey, forHTTPHeaderField: "Authorization")
         
         // Make API call
         URLSession.shared.dataTask(with: request) { data, response, error in

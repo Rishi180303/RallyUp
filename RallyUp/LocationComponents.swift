@@ -47,8 +47,19 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     func requestLocation() {
         isLoading = true
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.requestLocation()
+        let status = locationManager.authorizationStatus
+        switch status {
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse, .authorizedAlways:
+            locationManager.requestLocation()
+        case .denied, .restricted:
+            isLoading = false
+            errorMessage = "Location access denied. Please enable it in Settings."
+        @unknown default:
+            isLoading = false
+            errorMessage = "Unknown location authorization status."
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -68,6 +79,36 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             self.isLoading = false
             self.errorMessage = "Location error: \(error.localizedDescription)"
             print("Location manager error: \(error.localizedDescription)")
+        }
+    }
+
+    // iOS 14+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        handleAuthorizationChange(manager.authorizationStatus)
+    }
+
+    // iOS 13 and below
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        handleAuthorizationChange(status)
+    }
+
+    private func handleAuthorizationChange(_ status: CLAuthorizationStatus) {
+        switch status {
+        case .authorizedWhenInUse, .authorizedAlways:
+            locationManager.requestLocation()
+        case .denied, .restricted:
+            DispatchQueue.main.async {
+                self.isLoading = false
+                self.errorMessage = "Location access denied. Please enable it in Settings."
+            }
+        case .notDetermined:
+            // Wait for user prompt
+            break
+        @unknown default:
+            DispatchQueue.main.async {
+                self.isLoading = false
+                self.errorMessage = "Unknown location authorization status."
+            }
         }
     }
     
