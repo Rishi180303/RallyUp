@@ -10,10 +10,13 @@ struct SportsVenue: Identifiable {
     let coordinates: CLLocationCoordinate2D
 }
 
-class VenueService {
-    //API key
-    private let apiKey = "fsq3UYO/ugjYSNKo+odhi+9pe8M5b9R51ccSXwgdrxTi8LU="
+class VenueService: ObservableObject {
+    @Published var venues: [SportsVenue] = []
+    @Published var isLoading = false
+    @Published var errorMessage: String?
     
+    // Get API key from configuration
+    private let apiKey: String = Config.foursquareApiKey
     
     func fetchNearbyVenues(latitude: Double, longitude: Double, sport: String, completion: @escaping ([SportsVenue]?, Error?) -> Void) {
         
@@ -109,10 +112,7 @@ class VenueService {
                         venues.append(venue)
                     }
                     
-                    //return venues on main thread
-                    DispatchQueue.main.async {
-                        completion(venues, nil)
-                    }
+                    completion(venues, nil)
                 } else {
                     completion(nil, NSError(domain: "VenueService", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON format"]))
                 }
@@ -121,8 +121,6 @@ class VenueService {
             }
         }
         
-        //start the task
         task.resume()
     }
 }
-

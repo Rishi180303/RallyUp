@@ -101,10 +101,13 @@ GoogleService-Info.plist
 **/Secrets.swift
 **/Config.swift
 
-# Environment files
+# Environment files and API keys
 .env
 .env.local
 .env.production
+*.plist
+GoogleService-Info.plist
+Config.swift
 
 # Other sensitive files
 *.key
