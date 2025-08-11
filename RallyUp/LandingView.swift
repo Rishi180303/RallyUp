@@ -130,13 +130,7 @@ struct LandingView: View {
                     )
                 }
 
-                if let isComplete = authVM.isProfileComplete {
-                    NavigationLink(
-                        destination: isComplete ? AnyView(MainTabView()) : AnyView(ProfileSetupLocationView()),
-                        isActive: $authVM.isLoggedIn,
-                        label: { EmptyView() }
-                    )
-                }
+                // Navigation is handled by ContentView based on authVM state
             }
             .navigationBarHidden(true)
         }
