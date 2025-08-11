@@ -1,89 +1,59 @@
 # RallyUp
 
-A social networking iOS app that connects sports enthusiasts in your area. Find, join, and organize sports sessions with players of similar skill levels.
+iOS app for finding people to play sports with. Basically like Tinder but for sports buddies.
 
-## Features
+## What it does
 
-- **Session Discovery** - Browse nearby sports sessions on map or list view
-- **Venue Integration** - Find sports venues using Foursquare API
-- **User Authentication** - Secure login/signup with Firebase
-- **Messaging** - In-app communication between users
-- **Profile Management** - Sports preferences and skill levels
+- Find sports sessions near you
+- Connect with other players
+- Chat with people you want to play with
+- Find sports venues (basketball courts, soccer fields, etc.)
 
-## Supported Sports
+## Sports
 
 Basketball, Soccer, Tennis, Volleyball, Pickleball, Badminton
 
-## Tech Stack
+## Tech stuff
 
-- **Frontend**: SwiftUI, MapKit, CoreLocation
-- **Backend**: Firebase (Authentication, Firestore)
-- **APIs**: Foursquare (venue discovery)
-- **Platform**: iOS 15.0+
+- SwiftUI for the UI
+- Firebase for user accounts and chat
+- Foursquare API for finding venues
+- iOS 15+
 
-## Setup
+## Getting it running
 
-### Prerequisites
-- Xcode 14.0+
-- Firebase account
-- Foursquare Developer account
+1. Clone this repo
+2. You'll need Firebase and Foursquare accounts
+3. Copy the template files and add your API keys
+4. Open in Xcode and run
 
-### Installation
+## Setup details
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Rishi180303/RallyUp.git
-   cd RallyUp
-   ```
+### Firebase
+- Make a Firebase project
+- Add iOS app with bundle ID `Rishi.RallyUp`
+- Download `GoogleService-Info.plist`
 
-2. **Firebase Setup**
-   - Create a Firebase project
-   - Add iOS app with Bundle ID: `Rishi.RallyUp`
-   - Download `GoogleService-Info.plist`
-   - Copy `GoogleService-Info-Template.plist` to `GoogleService-Info.plist`
-   - Replace placeholder values with your Firebase config
+### Foursquare
+- Get an API key from Foursquare
+- Put it in `Config.swift`
 
-3. **Foursquare API Setup**
-   - Create a Foursquare app
-   - Get your API key
-   - Copy `VenueService-Template.swift` to `VenueService.swift`
-   - Replace `YOUR_FOURSQUARE_API_KEY_HERE` with your API key
+## Notes
 
-4. **Run the app**
-   ```bash
-   open RallyUp.xcodeproj
-   ```
-   - Select iOS Simulator
-   - Press `⌘ + R`
+- Don't commit the config files with your API keys
+- The .gitignore should handle this but double-check
 
-## Security
-
-- Never commit `GoogleService-Info.plist` or API keys
-- Use provided template files as starting points
-- `.gitignore` excludes sensitive files
-
-## Project Structure
+## Project structure
 
 ```
 RallyUp/
-├── RallyUp/
-│   ├── Views/           # UI components
-│   ├── Services/        # API integrations
-│   ├── Models.swift     # Data models
-│   └── AuthViewModel.swift
-├── Templates/           # Setup templates
-└── Tests/              # Unit & UI tests
+├── Views/           # UI screens
+├── Models.swift     # Data structures
+├── Services/        # API calls
+└── AuthViewModel.swift
 ```
-
-## Contributing
-
-Submit issues and enhancement requests.
-
-## License
-
-Educational purposes only.
 
 ---
 
-**Ready to find your next game? Let's RallyUp! 🚀**
+This is a school project, so feel free to use it for learning.
 
