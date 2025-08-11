@@ -14,6 +14,7 @@ struct MessagingView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var showError = false
+    @State private var conversationsListener: ListenerRegistration?
     
     var filteredConversations: [Conversation] {
         if searchText.isEmpty {
@@ -95,7 +96,11 @@ struct MessagingView: View {
             .navigationTitle("Messages")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
-                fetchConversations()
+                startConversationsListener()
+            }
+            .onDisappear {
+                conversationsListener?.remove()
+                conversationsListener = nil
             }
             .alert(isPresented: $showError) {
                 Alert(
@@ -107,6 +112,23 @@ struct MessagingView: View {
         }
     }
     
+    private func startConversationsListener() {
+        guard let currentUserId = Auth.auth().currentUser?.uid else {
+            errorMessage = "You must be logged in to view messages"
+            showError = true
+            return
+        }
+        isLoading = true
+        let db = Firestore.firestore()
+        conversationsListener?.remove()
+        conversationsListener = db.collection("conversations")
+            .whereField("participants", arrayContains: currentUserId)
+            .addSnapshotListener { _, _ in
+                // Reuse existing fetch to build full models (names + messages)
+                fetchConversations()
+            }
+    }
+
     private func fetchConversations() {
         guard let currentUserId = Auth.auth().currentUser?.uid else {
             errorMessage = "You must be logged in to view messages"
@@ -331,6 +353,7 @@ struct ChatView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var showError = false
+    @State private var messagesListener: ListenerRegistration?
     
     init(conversation: Conversation, primaryColor: Color) {
         self.conversation = conversation
@@ -417,8 +440,58 @@ struct ChatView: View {
                 dismissButton: .default(Text("OK"))
             )
         }
+        .onAppear {
+            startMessagesListener()
+        }
+        .onDisappear {
+            messagesListener?.remove()
+            messagesListener = nil
+        }
     }
     
+    private func startMessagesListener() {
+        let db = Firestore.firestore()
+        messagesListener?.remove()
+        messagesListener = db.collection("conversations")
+            .document(conversation.id)
+            .collection("messages")
+            .order(by: "timestamp", descending: false)
+            .addSnapshotListener { snapshot, error in
+                if let error = error {
+                    self.errorMessage = "Error loading messages: \(error.localizedDescription)"
+                    self.showError = true
+                    return
+                }
+                guard let documents = snapshot?.documents else { return }
+                var loaded: [Message] = []
+                var unreadIds: [String] = []
+                let currentUserId = Auth.auth().currentUser?.uid
+                for doc in documents {
+                    let data = doc.data()
+                    guard
+                        let id = data["id"] as? String,
+                        let senderId = data["senderId"] as? String,
+                        let receiverId = data["receiverId"] as? String,
+                        let content = data["content"] as? String,
+                        let ts = data["timestamp"] as? Timestamp,
+                        let isRead = data["isRead"] as? Bool
+                    else { continue }
+                    let msg = Message(id: id, senderId: senderId, receiverId: receiverId, content: content, timestamp: ts.dateValue(), isRead: isRead)
+                    loaded.append(msg)
+                    if receiverId == currentUserId, !isRead { unreadIds.append(id) }
+                }
+                self.messages = loaded
+                self.scrollToBottom = true
+                // Mark messages as read for current user
+                if let currentUserId = currentUserId, !unreadIds.isEmpty {
+                    let convoRef = db.collection("conversations").document(conversation.id)
+                    for mid in unreadIds {
+                        convoRef.collection("messages").document(mid).updateData(["isRead": true])
+                    }
+                }
+            }
+    }
+
     private func sendMessage() {
         guard !messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         guard let currentUserId = Auth.auth().currentUser?.uid else { return }
